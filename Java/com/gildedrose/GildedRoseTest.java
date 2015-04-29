@@ -81,12 +81,23 @@ public class GildedRoseTest {
     @Test
     public void testAgedBrieMax() {
     	int origSellIn = 10;
-    	int origQuality = 50;
+    	int origQuality = GildedRose.MAX_QUALITY;
     	Item[] items = new Item[] { new Item(GildedRose.AGED_BRIE, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
     	assertEquals(origQuality, app.items[0].quality);    	
+    }
+    
+    @Test
+    public void testExpiredAgedBrie_Mmmmm() {
+    	int origSellIn = 0;
+    	int origQuality = 5;
+    	Item[] items = new Item[] { new Item(GildedRose.AGED_BRIE, origSellIn, origQuality) };
+    	GildedRose app = new GildedRose(items);
+    	app.updateQuality();
+    	assertEquals(origSellIn-1, app.items[0].sellIn);
+    	assertEquals(origQuality+2, app.items[0].quality);    	
     }
     
     @Test
@@ -122,6 +133,18 @@ public class GildedRoseTest {
     	assertEquals(origQuality+3, app.items[0].quality);
     }
     
+    @Test
+    public void testMaxTickets() {
+    	int origSellIn = 5;
+    	int origQuality = GildedRose.MAX_QUALITY;
+    	Item[] items = new Item[] { new Item(GildedRose.BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT, origSellIn, origQuality) };
+    	GildedRose app = new GildedRose(items);
+    	app.updateQuality();
+    	assertEquals(origSellIn-1, app.items[0].sellIn);
+    	assertEquals(GildedRose.MAX_QUALITY, app.items[0].quality);
+    }
+
+        
     @Test
     public void testYesterdaysTickets() {
     	int origSellIn = 0;
