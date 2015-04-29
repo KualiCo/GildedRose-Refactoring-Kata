@@ -6,17 +6,28 @@ import org.junit.Test;
 
 public class GildedRoseTest {
 
-    @Test
+    private static final String FOOBAR = "foobar";
+
+	@Test
     public void foo() {
-        Item[] items = new Item[] { new Item("foo", 0, 0) };
+        Item[] items = new Item[] { new Item(FOOBAR, 0, 0) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
-        assertEquals("foo", app.items[0].name);
+        assertEquals(FOOBAR, app.items[0].name);
     }
+	
+	@Test
+	public void testItemOrder() {
+        Item[] items = new Item[] { new Item(FOOBAR, 0, 0), new Item(GildedRose.AGED_BRIE, 10, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(FOOBAR, app.items[0].name);
+        assertEquals(GildedRose.AGED_BRIE, app.items[1].name);
+	}
     
     @Test
     public void testSulfuras() {
-    	Item[] items = new Item[] { new Item("Sulfuras, Hand of Ragnaros", 20, 80) };
+    	Item[] items = new Item[] { new Item(GildedRose.SULFURAS_HAND_OF_RAGNAROS, 20, 80) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(80, app.items[0].quality);
@@ -27,7 +38,7 @@ public class GildedRoseTest {
     public void testTypicalItem() {
     	int origSellIn = 10;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("foobar", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(FOOBAR, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -38,7 +49,7 @@ public class GildedRoseTest {
     public void testExpiredItem() {
     	int origSellIn = 0;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("foobar", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(FOOBAR, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -49,7 +60,7 @@ public class GildedRoseTest {
     public void testZeroQualityItem() {
     	int origSellIn = -2;
     	int origQuality = 0;
-    	Item[] items = new Item[] { new Item("foobar", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(FOOBAR, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -60,7 +71,7 @@ public class GildedRoseTest {
     public void testAgedBrie() {
     	int origSellIn = 10;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("Aged Brie", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.AGED_BRIE, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -71,7 +82,7 @@ public class GildedRoseTest {
     public void testAgedBrieMax() {
     	int origSellIn = 10;
     	int origQuality = 50;
-    	Item[] items = new Item[] { new Item("Aged Brie", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.AGED_BRIE, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -82,7 +93,7 @@ public class GildedRoseTest {
     public void testFarAwayTickets() {
     	int origSellIn = 20;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -93,7 +104,7 @@ public class GildedRoseTest {
     public void testCloseTickets() {
     	int origSellIn = 10;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -104,7 +115,7 @@ public class GildedRoseTest {
     public void testReallyCloseTickets() {
     	int origSellIn = 5;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
@@ -115,7 +126,7 @@ public class GildedRoseTest {
     public void testYesterdaysTickets() {
     	int origSellIn = 0;
     	int origQuality = 10;
-    	Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", origSellIn, origQuality) };
+    	Item[] items = new Item[] { new Item(GildedRose.BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT, origSellIn, origQuality) };
     	GildedRose app = new GildedRose(items);
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
