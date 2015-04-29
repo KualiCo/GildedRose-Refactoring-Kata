@@ -5,6 +5,7 @@ class GildedRose {
 	static final String SULFURAS_HAND_OF_RAGNAROS = "Sulfuras, Hand of Ragnaros";
 	static final String BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT = "Backstage passes to a TAFKAL80ETC concert";
 	static final String AGED_BRIE = "Aged Brie";
+	static final String CONJURED_ITEM_PREFIX = "Conjured ";
 	
 	Item[] items;
 
@@ -22,6 +23,8 @@ class GildedRose {
             	handleBackstagePasses(currentItem);
             } else if (isHandOfRagnaros(currentItem)) {
             	handleSulfuras(currentItem);
+        	} else if (currentItem.name.startsWith(CONJURED_ITEM_PREFIX)) {
+        		handleConjuredItem(currentItem);
         	} else {
 				handleItem(currentItem);
 	        }
@@ -79,6 +82,13 @@ class GildedRose {
 			        currentItem.quality = currentItem.quality + 1;
 			    }
 			}
+		}
+	}
+	
+	private void handleConjuredItem(Item item) {
+		item.quality -= 2;
+		if (item.sellIn < 0) {
+			item.quality -= 2;
 		}
 	}
 	

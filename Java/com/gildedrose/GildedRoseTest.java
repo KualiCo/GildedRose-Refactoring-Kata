@@ -46,6 +46,17 @@ public class GildedRoseTest {
     }
     
     @Test
+    public void testConjuredItem() {
+    	int origSellIn = 10;
+    	int origQuality = 10;
+    	Item[] items = new Item[] { new Item(GildedRose.CONJURED_ITEM_PREFIX + FOOBAR, origSellIn, origQuality) };
+    	GildedRose app = new GildedRose(items);
+    	app.updateQuality();
+    	assertEquals(origSellIn-1, app.items[0].sellIn);
+    	assertEquals(origQuality-2, app.items[0].quality);
+    }
+    
+    @Test
     public void testExpiredItem() {
     	int origSellIn = 0;
     	int origQuality = 10;
@@ -54,6 +65,17 @@ public class GildedRoseTest {
     	app.updateQuality();
     	assertEquals(origSellIn-1, app.items[0].sellIn);
     	assertEquals(origQuality-2, app.items[0].quality);
+    }
+    
+    @Test
+    public void testExpiredConjuredItem() {
+    	int origSellIn = 0;
+    	int origQuality = 10;
+    	Item[] items = new Item[] { new Item(GildedRose.CONJURED_ITEM_PREFIX + FOOBAR, origSellIn, origQuality) };
+    	GildedRose app = new GildedRose(items);
+    	app.updateQuality();
+    	assertEquals(origSellIn-1, app.items[0].sellIn);
+    	assertEquals(origQuality-4, app.items[0].quality);
     }
     
     @Test
@@ -143,7 +165,6 @@ public class GildedRoseTest {
     	assertEquals(origSellIn-1, app.items[0].sellIn);
     	assertEquals(GildedRose.MAX_QUALITY, app.items[0].quality);
     }
-
         
     @Test
     public void testYesterdaysTickets() {
