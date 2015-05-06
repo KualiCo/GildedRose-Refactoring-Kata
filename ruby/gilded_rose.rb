@@ -1,56 +1,75 @@
 class GildedRose
 
-  def initialize(items)
+  def initialize items
     @items = items
   end
 
-  def update_quality()
+  def update_quality
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
+      case item.name
+      when "Aged Brie"
+        AgedBrie.new(item).update
+      when "Sulfuras, Hand of Ragnaros"
+        Sulfuras.new(item).update
+      when "Backstage passes to a TAFKAL80ETC concert"
+        Backstage.new(item).update
       else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
+        Default.new(item).update
       end
     end
   end
+
+  class Base
+    def initialize item
+      @item = item
+    end
+  end
+
+  class Backstage < Base
+    def update
+      @item.sell_in -= 1
+      @item.quality += 1
+
+      @item.quality += 1 if @item.sell_in <= 10
+      @item.quality += 1 if @item.sell_in <= 5
+      @item.quality = 0 if @item.sell_in <= 0
+    end
+  end
+
+  class Sulfuras < Base
+    def update
+      @item.sell_in -= 1
+    end
+  end
+
+  class AgedBrie < Base
+    def update
+      @item.sell_in -= 1
+      @item.quality += 1 unless @item.quality == 50
+
+      if @item.sell_in <= 0
+        @item.quality += 1 unless @item.quality == 50
+      end
+    end
+  end
+
+  class Default < Base
+    def update
+      @item.sell_in -= 1
+      @item.quality -= 1 unless @item.quality == 0
+
+      if @item.sell_in <= 0
+        @item.quality -= 1 unless @item.quality == 0
+      end
+    end
+  end
+
+  GILDED_CLASSES = {
+    "Aged Brie" => AgedBrie,
+    "Sulfuras, Hand of Ragnaros" => Sulfuras,
+    "Backstage passes to a TAFKAL80ETC concert" => Backstage
+  }
+
 end
 
 class Item
